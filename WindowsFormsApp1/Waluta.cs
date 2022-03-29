@@ -13,7 +13,5 @@ namespace WindowsFormsApp1
         public int timestamp { set; get; }
         public string Base { set; get; }
         public Dictionary<string, float> rates { set; get; }
-
-
     }
 }

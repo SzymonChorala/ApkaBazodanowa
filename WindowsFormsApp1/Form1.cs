@@ -35,8 +35,23 @@ namespace WindowsFormsApp1
             HttpClient client = new HttpClient();
             string response = await client.GetStringAsync(call);
             waluta = JsonConvert.DeserializeObject<Waluta>(response);
-
-
+            var context = new Przelicznik();
+            context.Waluty.Add(new WalutaBaz
+            {
+                disclaimer = waluta.disclaimer,
+                license = waluta.license,
+                timestamp = waluta.timestamp,
+                Base = waluta.Base,
+                ratesPLN = waluta.rates["PLN"],
+                ratesCHF = waluta.rates["CHF"],
+                ratesEUR = waluta.rates["EUR"],
+                ratesGBP = waluta.rates["GBP"],
+                ratesUSD = waluta.rates["USD"],
+                Date = dateTimePicker1.Text
+            }
+            ) ;
+            context.SaveChanges();
+            
             if (textBoxPLN.Text != "")
             {
                 double zloty = Convert.ToDouble(textBoxPLN.Text);
@@ -82,8 +97,9 @@ namespace WindowsFormsApp1
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
             string data = dateTimePicker1.Text;
-            string[] daty =data.Split('.');
-            call = "https://openexchangerates.org/api/historical/" + daty[2] + "-" + daty[1] + "-" + daty[0] + ".json?app_id=a88a77c6b5bb401ca088160709305677";
+            string[] daty =data.Split('/');
+            call = "https://openexchangerates.org/api/historical/" + daty[2] + "-" + daty[0] + "-" + daty[1] + ".json?app_id=a88a77c6b5bb401ca088160709305677";
+                    
         }
 
         private void textBoxPLN_Click(object sender, EventArgs e)
